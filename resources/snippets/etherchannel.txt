@@ -1,0 +1,23 @@
+{
+    "EtherChannel Gig1/0": {
+        "prefix": "etherchannelg1",
+        "body": [
+            "! Puertos EtherChannel",
+            "interface range gig1/0/${1:1}-${2:2}",
+            "channel-group ${3:2} mode active",
+            "interface port-channel ${3}"
+        ],
+        "description": "EtherChannel LACP Gig1/0/X-Y"
+    },
+
+    "EtherChannel G0": {
+        "prefix": "etherchannelg0",
+        "body": [
+            "! Puertos EtherChannel",
+            "interface range g0/${1:1}-${2:2}",
+            "channel-group ${3:2} mode active",
+            "interface port-channel ${3}"
+        ],
+        "description": "EtherChannel LACP G0/X-Y"
+    }
+}

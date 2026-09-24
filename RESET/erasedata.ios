@@ -1,0 +1,13 @@
+configure terminal
+crypto key zeroize rsa
+yes
+exit
+delete flash:vlan.dat
+!copear hasta aqui
+
+!escribe los comando y preciona la tecla indicada
+!er+tab+tab
+!enter
+!rel+tab
+!no
+!enter

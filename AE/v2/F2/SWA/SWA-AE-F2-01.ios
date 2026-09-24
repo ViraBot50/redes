@@ -1,0 +1,68 @@
+!conf Switch acceso
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWA-AE-F2-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+!vlan 12
+!name Camaras_AE
+!vlan 13
+!name Jefatura_AE
+!vlan 14
+!name Administrativos_AE
+!vlan 99
+!name Admin_TI
+!exit
+
+!Asignar puertos de acceso
+interface range f0/1-8
+switchport mode access
+switchport access vlan 12
+
+interface range f0/9-16
+switchport mode access
+switchport access vlan 13
+
+interface range f0/17-24
+switchport mode access
+switchport access vlan 14
+
+!puertos troncales
+!puertos etherchannel 
+interface range g0/1-2
+channel-group 3 mode active
+interface p3
+switchport mode trunk
+exit
+
+!SVI de administracion
+interface vlan 99
+ip address 172.30.36.138 255.255.255.128
+no shutdown
+exit
+ip default-gateway 172.30.36.254
+end
+!Guardar configuracion
+copy running-config startup-config

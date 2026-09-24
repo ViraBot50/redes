@@ -1,0 +1,7 @@
+agrega un snipet nuevo
+preciona -->Ctrl + Shift + P
+selecciona -->Snippets: Configure User Snippets
+selecciona -->New Global Snippets file
+asigna un nombre al archivo
+
+copia y pega el snipet a agregar a tu equipo en la carpeta de Snippets

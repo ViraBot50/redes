@@ -1,0 +1,97 @@
+!conf Switch de distribucion
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWD-EC-F3-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+!vlan 3
+!name Administrativos
+!vlan 4
+!name Directivos
+!vlan 5
+!name Soporte_TI
+!vlan 6
+!name Estudiantes
+!vlan 7
+!name Servidores
+!vlan 8
+!name profesores
+!vlan 99
+!name Admin_TI
+!exit
+
+
+!Asignar puertos de acceso (N/A)
+
+!Configurar EtherChannel
+!Conexion a Switch Core
+interface range G1/0/1-2
+channel-group 1 mode active
+interface p1
+switchport mode trunk
+!Conexion a SWA-EC-F1-01
+interface range G1/0/11-12
+channel-group 11 mode active
+interface p11
+switchport mode trunk
+!Conexion a SWA-EC-F1-02
+interface range G1/0/13-14
+channel-group 12 mode active
+interface p12
+switchport mode trunk
+!Conexion a SWA-EC-F2-01
+interface range G1/0/15-16
+channel-group 13 mode active
+interface p13
+switchport mode trunk
+!Conexion a SWA-EC-F2-02
+interface range G1/0/17-18
+channel-group 14 mode active
+interface p14
+switchport mode trunk
+!Conexion a SWA-EC-F3-01
+interface range G1/0/19-20
+channel-group 15 mode active
+interface p15
+switchport mode trunk
+!Conexion a SWA-EC-F3-02
+interface range G1/0/21-22
+channel-group 16 mode active
+interface p16   
+switchport mode trunk
+exit
+
+!Spanning-tree
+Spanning-tree mode rapid-pvst
+Spanning-tree vlan 3-8,99 root secondary
+
+
+!SVI de administracion
+interface vlan 99
+ip address 172.30.36.135 255.255.255.128
+no shutdown
+exit
+ip default-gateway 172.30.36.254
+

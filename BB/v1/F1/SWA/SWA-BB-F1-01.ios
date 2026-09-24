@@ -1,0 +1,60 @@
+!conf Switch acceso
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWA-BB-F1-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+vlan 41
+name Salas_Lectura_BB
+vlan 42
+name Camaras_BB
+vlan 99
+name Admin_TI
+exit
+
+!Asignar puertos de acceso
+interface range f0/1-12
+switchport mode access
+switchport access vlan 41
+
+interface range f0/13-24
+switchport mode access
+switchport access vlan 42
+
+
+!puertos troncales
+interface  g0/1
+switchport mode trunk
+exit
+
+!SVI de administracion
+interface vlan 99
+ip address 172.30.36.151 255.255.255.128
+no shutdown
+exit
+ip default-gateway 172.30.36.254
+end
+!Guardar configuracion
+copy running-config startup-config

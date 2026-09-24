@@ -1,0 +1,85 @@
+!conf Switch de distribucion
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWD-II-F2-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+!vlan 21
+!name Laboratorios_II
+!vlan 22
+!name Camaras_II
+!vlan 23
+!name Jefatura_II
+!vlan 24
+!name Administrativos_II
+!vlan 99
+!name Admin_TI
+!exit
+
+!Asignar puertos de acceso (N/A)
+!puertos troncales
+!Configurar EtherChannel
+!Conexion a Switch Core
+interface range G1/0/1-2
+channel-group 2 mode active
+interface p2
+switchport mode trunk
+
+
+!Conexion a SWA-II-F1-01
+interface range G1/0/11-12
+channel-group 21 mode active
+interface p21
+switchport mode trunk
+
+!Conexion a SWA-II-F1-02
+interface range G1/0/13-14
+channel-group 22 mode active
+interface p22
+switchport mode trunk
+
+!Conexion a SWA-II-F2-01
+interface range G1/0/15-16
+channel-group 23 mode active
+interface p23
+switchport mode trunk
+
+!Conexion a SWA-II-F2-02
+interface range G1/0/17-18
+channel-group 24 mode active
+interface p24
+switchport mode trunk
+exit
+
+
+!SVI de administracion
+interface vlan 99
+ip address 172.30.36.145 255.255.255.128
+no shutdown
+exit
+ip default-gateway 172.30.36.254
+!Guardar configuracion
+copy running-config startup-config
+

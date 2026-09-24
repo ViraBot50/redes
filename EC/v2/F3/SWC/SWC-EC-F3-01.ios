@@ -1,0 +1,187 @@
+!conf Switch Core
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWC-EC-F3-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+vlan 3
+name Administrativos
+vlan 4
+name Directivos
+vlan 5
+name Soporte_TI
+vlan 6
+name Estudiantes
+vlan 7
+name Servidores
+vlan 8
+name Profesores
+vlan 11
+name Laboratorios_AE
+vlan 12
+name Camaras_AE
+vlan 13
+name Jefatura_AE
+vlan 14
+name Administrativos_AE
+vlan 21
+name Laboratorios_ll
+vlan 22
+name Camaras_ll
+vlan 23
+name Jefatura_ll
+vlan 24
+name Administrativos_ll
+vlan 31
+name Laboratorios_IB
+vlan 32
+name Camaras_IB
+vlan 33
+name Jefatura_IB
+vlan 34
+name Administrativos_Ib
+vlan 41
+name Salas_lectura_BB
+vlan 42
+name Camaras_BB
+vlan 43
+name Jefatura_BB
+vlan 44
+name Control_BB
+vlan 99
+name Admin_TI
+exit
+
+!Apanning tree
+Spanning-tree mode rapid-pvst
+Spanning-tree vlan 1-4094 root primary
+
+
+
+!Asignar puertos de acceso (N/A)
+
+!Configuracion de etherchannel
+!Conexion SWD-EC-F3-01
+interface range G1/0/1-2
+channel-group 1 mode active
+interface p1
+switchport mode trunk
+!Conexion a SWD-II-F2-01
+interface range G1/0/3-4
+channel-group 2 mode active
+interface p2
+switchport mode trunk
+!Conexion a SWD-BM-F2-01
+interface range G1/0/5-6
+channel-group 3 mode active
+interface p3
+switchport mode trunk
+!Conexion a SWD-BB-F2-01
+interface range G1/0/7-8
+channel-group 4 mode active
+interface p4
+switchport mode trunk
+!Conexion a SWD-AE-F2-01
+interface range G1/0/9-10
+channel-group 5 mode active
+interface p5
+switchport mode trunk
+exit
+
+!SVI de administracion
+ip routing
+interface VLAN 3
+ip address 172.30.36.126 255.255.255.128
+no shutdown
+interface VLAN 4
+ip address 172.30.39.30 255.255.255.224
+no shutdown
+interface VLAN 5
+ip address 172.30.39.94 255.255.255.224
+no shutdown
+interface VLAN 6
+ip address 172.30.31.254 255.255.224.0
+no shutdown
+interface VLAN 7
+ip address 172.30.38.254 255.255.255.192
+no shutdown
+interface VLAN 8
+ip address 172.30.35.254 255.255.252.0
+no shutdown
+interface VLAN 11
+ip address 172.30.37.126 255.255.255.128
+no shutdown
+interface VLAN 12
+ip address 172.30.39.126 255.255.255.224
+no shutdown
+interface VLAN 13
+ip address 172.30.39.158 255.255.255.224
+no shutdown
+interface VLAN 14
+ip address 172.30.39.190 255.255.255.224
+no shutdown
+interface VLAN 21
+ip address 172.30.37.254 255.255.255.128
+no shutdown
+interface VLAN 22
+ip address 172.30.39.222 255.255.255.224
+no shutdown
+interface VLAN 23
+ip address 172.30.39.254 255.255.255.224
+no shutdown
+interface VLAN 24
+ip address 172.30.40.30 255.255.255.224
+no shutdown
+interface VLAN 31
+ip address 172.30.38.190 255.255.255.192
+no shutdown
+interface VLAN 32
+ip address 172.30.40.46 255.255.255.240
+no shutdown
+interface VLAN 33
+ip address 172.30.40.62 255.255.255.240
+no shutdown
+interface VLAN 34
+ip address 172.30.40.78 255.255.255.240
+no shutdown
+interface VLAN 41
+ip address 172.30.38.126 255.255.255.128
+no shutdown
+interface VLAN 42
+ip address 172.30.40.94 255.255.255.240
+no shutdown
+interface VLAN 43
+ip address 172.30.40.110 255.255.255.240
+no shutdown
+interface VLAN 44
+ip address 172.30.39.62 255.255.255.224
+no shutdown
+interface Vlan 99
+ip address 172.30.36.254 255.255.255.128
+no shutdown
+
+
+exit
+

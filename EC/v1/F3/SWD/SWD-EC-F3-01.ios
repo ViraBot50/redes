@@ -1,0 +1,58 @@
+!conf Switch de distribucion
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWD-EC-F3-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!vlans
+vlan 3
+name Administrativos
+vlan 4
+name Directivos
+vlan 5
+name Soporte_TI
+vlan 6
+name Estudiantes
+vlan 7
+name Servidores
+vlan 8
+name profesores
+vlan 99
+name Admin_TI
+exit
+
+!Asignar puertos de acceso (N/A)
+
+!puertos troncales
+interface range g1/0/1-7
+switchport mode trunk
+exit
+
+!SVI de administracion
+interface vlan 99
+ip address 172.30.36.135 255.255.255.128
+no shutdown
+exit
+ip default-gateway 172.30.36.254
+
