@@ -34,6 +34,33 @@ exit
 !name Admin_TI
 !exit
 
+!puertos etherchannel 
+interface range g0/1-2
+channel-group 2 mode active
+interface p2
+switchport mode trunk
+exit
+
+! Puertos troncales fisicos
+interface range g0/1-2
+switchport mode trunk
+exit
+
+
+! spanningTree
+spanning-tree mode rapid-pvst
+interface range f0/1-24
+spanning-tree portfast
+spanning-tree bpduguard enable
+exit
+
+! vtp
+vtp version 2
+vtp domain Ingenieria-Industrial
+vtp password cisco
+vtp mode client
+
+
 !Asignar puertos de acceso
 interface range f0/1-12
 switchport mode access
@@ -43,12 +70,7 @@ interface range f0/13-24
 switchport mode access
 switchport access vlan 22
 
-!puertos etherchannel 
-interface range g0/1-2
-channel-group 2 mode active
-interface p2
-switchport mode trunk
-exit
+
 
 !SVI de administracion
 interface vlan 99

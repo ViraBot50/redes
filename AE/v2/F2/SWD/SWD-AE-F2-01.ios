@@ -25,18 +25,7 @@ login local
 transport input ssh
 exit
 
-!vlans
-!vlan 11
-!name Laboratorios_AE
-!vlan 12
-!name Camaras_AE
-!vlan 13
-!name Jefatura_AE
-!vlan 14
-!name Administrativos_AE
-!vlan 99
-!name Admin_TI
-!exit
+
 
 !Asignar puertos de acceso (N/A)
 
@@ -69,6 +58,40 @@ interface p14
 switchport mode trunk
 exit
 
+
+! Puertos troncales fisicos
+interface range g1/0/1-2
+switchport mode trunk
+exit
+
+interface range g1/0/11-18
+switchport mode trunk
+exit
+
+! spanningTree
+spanning-tree mode rapid-pvst
+spanning-tree vlan 11-14,99 root secondary
+
+! vtp
+vtp version 2
+vtp domain Administracion-empresarial
+vtp password cisco
+vtp mode server
+
+!vlans
+vlan 11
+name Laboratorios_AE
+vlan 12
+name Camaras_AE
+vlan 13
+name Jefatura_AE
+vlan 14
+name Administrativos_AE
+vlan 99
+name Admin_TI
+exit
+
+
 !SVI de administracion
 interface vlan 99
 ip address 172.30.36.140 255.255.255.128
@@ -76,3 +99,5 @@ no shutdown
 exit
 ip default-gateway 172.30.36.254
 
+end
+copy running-config startup-config

@@ -25,18 +25,7 @@ login local
 transport input ssh
 exit
 
-!vlans
-!vlan 41
-!name Salas_Lectura_BB
-!vlan 42
-!name Camaras_BB
-!vlan 43
-!name Jefatura_BB
-!vlan 44
-!name Control_BB
-!vlan 99
-!name Admin_TI
-!exit
+
 
 !Asignar puertos de acceso (N/A)
 !Configurar EtherChannel
@@ -66,6 +55,40 @@ channel-group 44 mode active
 interface p44
 switchport mode trunk
 exit
+
+! Puertos troncales fisicos
+interface range g1/0/1-2
+switchport mode trunk
+exit
+
+! Puertos troncales fisicos
+interface range g1/0/11-18
+switchport mode trunk
+exit
+
+! spanningTree
+spanning-tree mode rapid-pvst
+spanning-tree vlan 41-44,99 root secondary
+
+! vtp
+vtp version 2
+vtp domain Biblioteca
+vtp password cisco
+vtp mode server
+
+!vlans
+vlan 41
+name Salas_Lectura_BB
+vlan 42
+name Camaras_BB
+vlan 43
+name Jefatura_BB
+vlan 44
+name Control_BB
+vlan 99
+name Admin_TI
+exit
+
 
 !SVI de administracion
 interface vlan 99

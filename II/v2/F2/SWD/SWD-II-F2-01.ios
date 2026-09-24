@@ -25,22 +25,10 @@ login local
 transport input ssh
 exit
 
-!vlans
-!vlan 21
-!name Laboratorios_II
-!vlan 22
-!name Camaras_II
-!vlan 23
-!name Jefatura_II
-!vlan 24
-!name Administrativos_II
-!vlan 99
-!name Admin_TI
-!exit
+
 
 !Asignar puertos de acceso (N/A)
-!puertos troncales
-!Configurar EtherChannel
+
 !Conexion a Switch Core
 interface range G1/0/1-2
 channel-group 2 mode active
@@ -73,6 +61,42 @@ interface p24
 switchport mode trunk
 exit
 
+! Puertos troncales fisicos
+interface range g1/0/1-2
+switchport mode trunk
+exit
+
+interface range g1/0/11-18
+switchport mode trunk
+exit
+
+! spanningTree
+spanning-tree mode rapid-pvst
+spanning-tree vlan 21-24,99 root secondary
+
+
+
+
+! vtp
+vtp version 2
+vtp domain Ingenieria-Industrial
+vtp password cisco
+vtp mode server
+
+!vlans
+vlan 21
+name Laboratorios_II
+vlan 22
+name Camaras_II
+vlan 23
+name Jefatura_II
+vlan 24
+name Administrativos_II
+vlan 99
+name Admin_TI
+exit
+
+
 
 !SVI de administracion
 interface vlan 99
@@ -81,5 +105,8 @@ no shutdown
 exit
 ip default-gateway 172.30.36.254
 !Guardar configuracion
+
+
+
 copy running-config startup-config
 

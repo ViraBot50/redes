@@ -25,6 +25,56 @@ login local
 transport input ssh
 exit
 
+
+
+
+
+
+
+!Asignar puertos de acceso (N/A)
+
+!Configuracion de etherchannel
+!Conexion SWD-EC-F3-01
+interface range G1/0/1-2
+channel-group 1 mode active
+interface p1
+switchport mode trunk
+!Conexion a SWD-II-F2-01
+interface range G1/0/3-4
+channel-group 2 mode active
+interface p2
+switchport mode trunk
+!Conexion a SWD-BM-F2-01
+interface range G1/0/5-6
+channel-group 3 mode active
+interface p3
+switchport mode trunk
+!Conexion a SWD-BB-F2-01
+interface range G1/0/7-8
+channel-group 4 mode active
+interface p4
+switchport mode trunk
+!Conexion a SWD-AE-F2-01
+interface range G1/0/9-10
+channel-group 5 mode active
+interface p5
+switchport mode trunk
+exit
+
+!puertos fisicos  troncales
+interface range G1/0/1-10
+switchport mode trunk
+exit
+
+!Apanning tree
+Spanning-tree mode rapid-pvst
+Spanning-tree vlan 1-44,99 root primary
+
+!configuracion vtp
+!dominio
+vtp version 2
+vtp mode transparent 
+
 !vlans
 vlan 3
 name Administrativos
@@ -74,41 +124,6 @@ vlan 99
 name Admin_TI
 exit
 
-!Apanning tree
-Spanning-tree mode rapid-pvst
-Spanning-tree vlan 1-4094 root primary
-
-
-
-!Asignar puertos de acceso (N/A)
-
-!Configuracion de etherchannel
-!Conexion SWD-EC-F3-01
-interface range G1/0/1-2
-channel-group 1 mode active
-interface p1
-switchport mode trunk
-!Conexion a SWD-II-F2-01
-interface range G1/0/3-4
-channel-group 2 mode active
-interface p2
-switchport mode trunk
-!Conexion a SWD-BM-F2-01
-interface range G1/0/5-6
-channel-group 3 mode active
-interface p3
-switchport mode trunk
-!Conexion a SWD-BB-F2-01
-interface range G1/0/7-8
-channel-group 4 mode active
-interface p4
-switchport mode trunk
-!Conexion a SWD-AE-F2-01
-interface range G1/0/9-10
-channel-group 5 mode active
-interface p5
-switchport mode trunk
-exit
 
 !SVI de administracion
 ip routing
@@ -183,5 +198,4 @@ ip address 172.30.36.254 255.255.255.128
 no shutdown
 
 
-exit
-
+end

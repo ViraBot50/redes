@@ -36,6 +36,32 @@ exit
 ! name Admin_TI
 ! exit
 
+! Puertos EtherChannel
+interface range g0/1-2
+channel-group 6 mode active
+interface p6
+switchport mode trunk
+exit
+
+! Puertos troncales fisicos 
+interface range g0/1-2
+switchport mode trunk
+exit
+
+!Spanning-tree
+Spanning-tree mode rapid-pvst
+interface range f0/1-24
+Spanning-tree portfast
+Spanning-tree bpduguard enable 
+exit
+
+
+!Configuracion vtp
+!dominio
+vtp version 2
+vtp domain Edificio-Central
+vtp password cisco
+vtp mode client
 !Asignar puertos de acceso
 interface range f0/1-8
 switchport mode access
@@ -49,12 +75,7 @@ interface range f0/17-24
 switchport mode access
 switchport access vlan 7
 
-! Puertos EtherChannel
-interface range g0/1-2
-channel-group 6 mode active
-interface p6
-switchport mode trunk
-exit
+
 
 !SVI de administracion
 interface vlan 99
@@ -65,4 +86,3 @@ ip default-gateway 172.30.36.254
 end
 !Guardar configuracion
 copy running-config startup-config
-!

@@ -25,18 +25,7 @@ login local
 transport input ssh
 exit
 
-!vlans
-!vlan 31
-!name Laboratorios_IB
-!vlan 32
-!name Camaras_IB
-!vlan 33
-!name Jefatura_IB
-!vlan 34
-!name Administrativos_IB
-!vlan 99
-!name Admin_TI
-!exit
+
 
 !Asignar puertos de acceso (N/A)
 
@@ -61,12 +50,45 @@ interface range G1/0/15-16
 channel-group 33 mode active
 interface p33
 switchport mode trunk
-!Conexion a SWA-BB-F2-02
+!Conexion a SWA-BM-F2-02
 interface range G1/0/17-18
 channel-group 34 mode active
 interface p34
 switchport mode trunk
 exit
+
+! Puertos troncales fisicos
+interface range g1/0/1-2
+switchport mode trunk
+exit
+
+interface range g1/0/11-18
+switchport mode trunk
+exit
+
+! spanningTree
+spanning-tree mode rapid-pvst
+spanning-tree vlan 31-34,99 root secondary
+
+! vtp
+vtp version 2
+vtp domain Ingenieria_Biomedica
+vtp password cisco
+vtp mode server
+
+! vlans
+vlan 31
+name Laboratorios_IB
+vlan 32
+name Camaras_IB
+vlan 33
+name Jefatura_IB
+vlan 34
+name Administrativos_IB
+vlan 99
+name Admin_TI
+exit
+
 
 !SVI de administracion
 interface vlan 99
@@ -74,6 +96,7 @@ ip address 172.30.36.150 255.255.255.128
 no shutdown
 exit
 ip default-gateway 172.30.36.254
+exit
 !Guardar configuracion
 copy running-config startup-config
 

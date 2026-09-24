@@ -1,0 +1,10 @@
+configure terminal  
+! Apagar puertos GigabitEthernet 1/0/1-24
+interface range g1/0/1-10
+shutdown
+exit
+
+! Levantar puertos GigabitEthernet 1/0/1-24
+interface range g1/0/1-10
+no shutdown
+exit

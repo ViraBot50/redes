@@ -33,27 +33,42 @@ exit
 ! vlan 99
 ! name Admin_TI
 ! exit
-
-
-!Asignar puertos de acceso
-interface range f0/1-8
-switchport mode access
-switchport access vlan 5
-
-interface range f0/9-16
-switchport mode access
-switchport access vlan 8
-
-interface range f0/17-24
-switchport mode access
-switchport access vlan 99
-
 ! Puertos EtherChannel
 interface range g0/1-2
 channel-group 3 mode active
 interface p3
 switchport mode trunk
 exit
+
+! Puertos troncales fisicos
+interface range g0/1-2
+switchport mode trunk
+exit
+
+
+! spanningTree
+spanning-tree mode rapid-pvst
+interface range f0/1-24
+spanning-tree portfast
+spanning-tree bpduguard enable
+exit
+
+! vtp
+vtp version 2
+vtp domain Edificio-Central
+vtp password cisco
+vtp mode client
+!
+!Asignar puertos de acceso
+interface range f0/1-12
+switchport mode access
+switchport access vlan 5
+
+interface range f0/13-24
+switchport mode access
+switchport access vlan 8
+ 
+
 
 !SVI de administracion
 interface vlan 99
