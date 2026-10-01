@@ -196,6 +196,69 @@ no shutdown
 interface Vlan 99
 ip address 172.30.36.254 255.255.255.128
 no shutdown
+exit
+
+!Configuracion DHCP (Restringir gateway)
+ip dhcp excluded-address 172.30.31.254
+ip dhcp excluded-address 172.30.35.254
+ip dhcp excluded-address 172.30.36.126
+ip dhcp excluded-address 172.30.37.254
+ip dhcp excluded-address 172.30.38.190
+ip dhcp excluded-address 172.30.38.126
+ip dhcp excluded-address 172.30.37.126
+
+
+
+!Asignar direcciones por dhcp
+ip dhcp pool Estudiantes
+network 172.30.0.0 255.255.224.0
+default-router 172.30.31.254
+dns-server 172.30.38.194
+domain-name estudiantes.equipo5.edu
+!
+ip dhcp pool Profesores
+network 172.30.32.0 255.255.252.0
+default-router 172.30.35.254
+dns-server 172.30.38.194
+domain-name profesores.equipo5.edu
+!
+ip dhcp pool Administrativos
+network 172.30.36.0 255.255.255.128
+default-router 172.30.36.126
+dns-server 172.30.38.194
+domain-name administrativo.equipo5.edu
+exit
+!
+ip dhcp pool Laboratorios_II
+network 172.30.37.128 255.255.255.128
+default-router 172.30.37.254
+dns-server 172.30.38.194
+domain-name Laboratorios_II.equipo5.edu
+exit
+!
+ip dhcp pool Laboratorios_BM
+network 172.30.38.128 255.255.255.192
+default-router 172.30.38.190
+dns-server 172.30.38.194
+domain-name Laboratorios_BM.equipo5.edu
+!
+ip dhcp pool Laboratorios_BB
+network 172.30.38.0 255.255.255.128
+default-router 172.30.38.126
+dns-server 172.30.38.194
+domain-name Sala_lectura_BB.equipo5.edu
+exit
+!
+ip dhcp pool Laboratorios_AE
+network 172.30.37.0 255.255.255.128
+default-router 172.30.37.126
+dns-server 172.30.38.194
+domain-name Laboratorios_BM.equipo5.edu
+exit
+
+
+
+
 
 
 end
