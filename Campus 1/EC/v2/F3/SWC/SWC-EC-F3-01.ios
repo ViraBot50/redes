@@ -206,6 +206,17 @@ ip dhcp excluded-address 172.30.37.254
 ip dhcp excluded-address 172.30.38.190
 ip dhcp excluded-address 172.30.38.126
 ip dhcp excluded-address 172.30.37.126
+!Campus 2
+ip dhcp excluded-address 172.30.50.238
+ip dhcp excluded-address 172.30.50.222
+ip dhcp excluded-address 172.30.50.254
+ip dhcp excluded-address 172.30.48.254
+ip dhcp excluded-address 172.30.49.190
+ip dhcp excluded-address 172.30.49.254
+ip dhcp excluded-address 172.30.50.62
+ip dhcp excluded-address 172.30.50.126
+ip dhcp excluded-address 172.30.51.14
+ip dhcp excluded-address 172.30.49.126
 
 
 
@@ -256,9 +267,88 @@ dns-server 172.30.38.194
 domain-name Laboratorios_BM.equipo5.edu
 exit
 
+!Campus 2
 
+ip dhcp pool Admin_PS_Campus_2
+network 172.30.50.224 255.255.255.240
+default-router 172.30.50.238
+dns-server 172.30.38.194
+domain-name Admin_PS.equipo5.edu
+exit
 
+ip dhcp pool Biblioteca_PS_Campus_2
+network 172.30.50.192 255.255.255.224
+default-router 172.30.50.222
+dns-server 172.30.38.194
+domain-name Biblioteca_PS.equipo5.edu
+exit
 
+ip dhcp pool Laboratorio_PS_Campus_2
+network 172.30.50.240 255.255.255.240
+default-router 172.30.50.254
+dns-server 172.30.38.194
+domain-name Laboratorio_PS.equipo5.edu
+exit
 
+ip dhcp pool Salones_PS_Campus_2
+network 172.30.48.0 255.255.255.0
+default-router 172.30.48.254
+dns-server 172.30.38.194
+domain-name Salones_PS.equipo5.edu
+exit
 
+ip dhcp pool Lab_1_CC_Campus_2
+network 172.30.49.128 255.255.255.192
+default-router 172.30.49.190
+dns-server 172.30.38.194
+domain-name Lab_1_CC.equipo5.edu
+exit
+
+ip dhcp pool Lab_2_CC_Campus_2
+network 172.30.49.192 255.255.255.192
+default-router 172.30.49.254
+dns-server 172.30.38.194
+domain-name Lab_2_CC.equipo5.edu
+exit
+
+ip dhcp pool Taller_1_CIC_Campus_2
+network 172.30.50.0 255.255.255.192
+default-router 172.30.50.62
+dns-server 172.30.38.194
+domain-name Taller_1_CIC.equipo5.edu
+exit
+
+ip dhcp pool Taller_2_CIC_Campus_2
+network 172.30.50.64 255.255.255.192
+default-router 172.30.50.126
+dns-server 172.30.38.194
+domain-name Taller_2_CIC.equipo5.edu
+exit
+
+ip dhcp pool Admin_CIC_Campus_2
+network 172.30.51.0 255.255.255.240
+default-router 172.30.51.14
+dns-server 172.30.38.194
+domain-name Admin_CIC.equipo5.edu
+exit
+
+ip dhcp pool Salones_CIC_Campus_2
+network 172.30.49.0 255.255.255.128
+default-router 172.30.49.126
+dns-server 172.30.38.194
+domain-name Salones_CIC.equipo5.edu
+exit
+
+!Enlace a campus 2
+int g1/0/24
+no switchport 
+ip address 172.30.51.17 255.255.255.192
+description Connection to Campus 2
+no shutdown 
+
+!Configruación de OSPF
+router ospf 5 
+router-id 1.1.1.1
+auto-cost reference-bandwidth 1000
+network 172.30.0.0 0.0.255.255 area 0
 end

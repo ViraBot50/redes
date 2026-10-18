@@ -1,0 +1,167 @@
+!conf Switch Core
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWC-CC-F1-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+!Asignar puertos de acceso (N/A)
+
+!Configuracion de troncal
+!Conexion SWA-CC-F1-01
+interface G1/0/1
+switchport mode trunk
+
+!Conexion a SWA-CC-F2-01
+interface G1/0/2
+switchport mode trunk
+
+!Conexion a SWA-PS-F1-01
+interface G1/0/3
+switchport mode trunk
+
+!Conexion a SWA-PS-F2-01
+interface G1/0/4
+switchport mode trunk
+
+!Conexion a SWA-CIC-F1-01
+interface G1/0/5
+switchport mode trunk
+
+!Conexion a SWA-CIC-F2-01
+interface G1/0/6
+switchport mode trunk
+exit
+
+
+!Spanning tree
+Spanning-tree mode rapid-pvst
+Spanning-tree vlan 1,51-54,61-62,71-74,98 root primary
+
+!configuracion vtp
+!dominio
+vtp domain campus2
+vtp password cisco
+vtp version 2
+vtp mode server 
+
+!vlans
+vlan 51
+name Admin_Ps
+vlan 52
+name Biblioteca_Ps
+vlan 53
+name Laboratorio_Ps
+vlan 54
+name Salones_Ps
+vlan 61
+name Lab_1_CC
+vlan 62
+name Lab_2_CC
+vlan 71
+name Taller_1_CIC
+vlan 72
+name Taller_2_CIC
+vlan 73
+name Admin_CIC
+vlan 74
+name Salones_CIC
+vlan 98
+name Admin_IT_2
+
+exit
+
+
+!SVI de administracion
+ip routing
+
+interface VLAN 51
+ip address 172.30.50.238 255.255.255.240
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 52
+ip address 172.30.50.222 255.255.255.224
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 53
+ip address 172.30.50.254 255.255.255.240
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 54
+ip address 172.30.48.254 255.255.255.0
+no shutdown
+ip helper-address 172.30.51.17
+!
+interface VLAN 61
+ip address 172.30.49.190 255.255.255.192
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 62
+ip address 172.30.49.254 255.255.255.192
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 71
+ip address 172.30.50.62 255.255.255.192
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 72
+ip address 172.30.50.126 255.255.255.192
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 73
+ip address 172.30.51.14 255.255.255.240
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 74
+ip address 172.30.49.126 255.255.255.128
+no shutdown
+ip helper-address 172.30.51.17
+
+interface VLAN 98
+ip address 172.30.50.129 255.255.255.192
+no shutdown
+
+
+exit
+
+!Enlace a campus 1
+int g1/0/24
+no switchport 
+ip address 172.30.51.18 255.255.255.252
+description Connection to Campus 1
+no shutdown 
+
+!Configruación de OSPF
+router ospf 5 
+router-id 2.2.2.2
+auto-cost reference-bandwidth 1000
+network 172.30.0.0 0.0.255.255 area 0
+end

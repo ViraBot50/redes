@@ -1,0 +1,68 @@
+!conf Switch acceso
+enable 
+configure terminal
+
+!parametros basicos
+hostname SWA-PS-F2-01
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+
+
+!Asignar puertos de acceso
+interface range f0/1-12
+switchport mode access
+switchport access vlan 53
+
+interface range f0/13-24
+switchport mode access
+switchport access vlan 54
+
+
+
+! Puertos troncales fisicos 
+interface range g0/1-2
+switchport mode trunk
+exit
+
+!Spanning-tree
+Spanning-tree mode rapid-pvst
+interface range f0/1-24
+Spanning-tree portfast
+Spanning-tree bpduguard enable 
+exit
+
+
+!Configuracion vtp
+!dominio
+vtp version 2
+vtp domain campus2
+vtp password cisco
+vtp mode client
+
+!SVI de administracion
+interface vlan 98
+ip address 172.30.50.133 255.255.255.192
+no shutdown
+exit
+ip default-gateway 172.30.50.129
+end
+!Guardar configuracion
+copy running-config startup-config
