@@ -1,0 +1,54 @@
+!conf router R-EXTENSION
+enable 
+configure terminal
+
+!parametros basicos
+hostname R-EXTENSION
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+!Enlace a R-EXT-EDGE
+int S0/1/0
+ip address 172.30.54.2 255.255.255.252
+description Enlace a R-EXT-EDGE
+no shutdown 
+
+!gateway de oficinas
+int G0/0/0
+ip address 172.30.53.254 255.255.255.0
+description gateway de oficinas
+no shutdown 
+
+!gateway de salones
+int G0/0/1
+ip address 172.30.52.254 255.255.255.0
+description gateway de salones
+no shutdown 
+
+!Configuracion de OSPF
+router ospf 5 
+router-id 3.3.3.1
+auto-cost reference-bandwidth 1000
+network 172.30.52.0 0.0.0.255 area 0
+network 172.30.53.0 0.0.0.255 area 0
+network 172.30.54.0 0.0.0.3 area 0
+default-information originate 
+end

@@ -1,0 +1,49 @@
+!conf router ISP1
+enable 
+configure terminal
+
+!parametros basicos
+hostname ISP1
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+! Enlace a ISP2
+int S0/2/0
+ip address 209.165.201.33 255.255.255.240
+description Enlace a ISP2
+no shutdown 
+
+!Enlace a core campus 1
+int G0/0/1
+ip address 209.165.200.225 255.255.255.224
+description Enlace a core campus 1
+no shutdown 
+
+!gateway de red de ISP1
+int G0/0/0
+ip address 209.165.201.14 255.255.255.240
+description gateway de red de ISP1
+no shutdown 
+
+
+
+!Configuracion routeo estatico
+ip route 0.0.0.0 0.0.0.0 209.165.201.46

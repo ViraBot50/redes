@@ -1,0 +1,76 @@
+!conf router R-EXT-EDGE
+enable 
+configure terminal
+
+!parametros basicos
+hostname R-EXT-EDGE
+ip domain-name equipo5.edu
+banner motd #Acceso restringido#
+enable secret class
+service password-encryption
+
+!console 
+line console 0
+password cisco
+login 
+exit
+
+!ssh
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+! Enlace a R-EXTENSION
+int S0/1/0
+ip address 172.30.54.1 255.255.255.252
+description Enlace a R-EXTENSION
+no shutdown 
+
+!Enlace a ISP2
+int S0/1/1
+ip address 209.165.200.193 255.255.255.224
+description Enlace a ISP2
+no shutdown 
+
+!Ruta default a ISP2
+ip route 0.0.0.0 0.0.0.0 209.165.200.222
+
+!Tunnel con core campus 1
+int tunnel 0
+ip address 10.10.10.9 255.255.255.252
+tunnel source S0/1/1
+tunnel destination 209.165.200.254 
+tunnel mode gre ip 
+no shutdown 
+
+!Configuracion de OSPF
+router ospf 5 
+router-id 3.3.3.3
+auto-cost reference-bandwidth 1000
+network 172.30.54.0 0.0.0.3 area 0
+network 10.10.10.8 0.0.0.3 area 0
+exit
+
+!Configuracion de nat
+int s0/1/0
+ip nat inside 
+int s0/1/1
+ip nat outside 
+exit
+
+access-list 99 permit 172.30.52.0 0.0.0.255 
+access-list 99 permit 172.30.53.0 0.0.0.255 
+access-list 99 deny any 
+
+ip nat pool POOL-NAT 209.165.202.129 209.165.202.129 netmask 255.255.255.252
+
+ip nat inside source list 99 pool POOL-NAT overload 
+
+ip nat inside source static 172.30.53.1 209.165.202.130
+
+
