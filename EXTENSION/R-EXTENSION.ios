@@ -50,5 +50,4 @@ auto-cost reference-bandwidth 1000
 network 172.30.52.0 0.0.0.255 area 0
 network 172.30.53.0 0.0.0.255 area 0
 network 172.30.54.0 0.0.0.3 area 0
-default-information originate 
 end
