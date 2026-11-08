@@ -25,12 +25,6 @@ login local
 transport input ssh
 exit
 
-
-
-
-
-
-
 !Asignar puertos de acceso (N/A)
 
 !Configuracion de etherchannel
@@ -346,22 +340,11 @@ ip address 172.30.51.17 255.255.255.192
 description Connection to Campus 2
 no shutdown 
 
-!configuracion a enlace ISP1
+!configuracion a enlace R-EC-EDGE
 int g1/0/23
 no switchport 
-description Enlace a ISP1
-ip address 209.165.200.254 255.255.255.224
-no shutdown 
-
-!Configuracion ruta default a ISP1
-ip route 0.0.0.0 0.0.0.0 209.165.200.225
-
-!Tunnel con R-EXT-EDGE
-int tunnel 0
-ip address 10.10.10.10 255.255.255.252
-tunnel source G1/0/23
-tunnel destination 209.165.200.193
-tunnel mode gre ip 
+description Enlace a R-EC-EDGE
+ip address 172.30.51.21 255.255.255.252
 no shutdown 
 
 !Configuracion de OSPF
@@ -369,7 +352,6 @@ router ospf 5
 router-id 1.1.1.1
 auto-cost reference-bandwidth 1000
 network 172.30.0.0 0.0.255.255 area 0
-network 10.10.10.8 0.0.0.3 area 0
 end
 
 
