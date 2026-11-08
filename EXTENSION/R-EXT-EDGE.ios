@@ -54,6 +54,7 @@ router-id 3.3.3.3
 auto-cost reference-bandwidth 1000
 network 172.30.54.0 0.0.0.3 area 0
 network 10.10.10.8 0.0.0.3 area 0
+default-information originate 
 exit
 
 !Configuracion de nat
