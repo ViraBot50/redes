@@ -46,3 +46,4 @@ no shutdown
 !Configuracion routeo estatico
 ip route 0.0.0.0 0.0.0.0 209.165.201.33
 ip route 209.165.202.128 255.255.255.252 209.165.200.193
+
