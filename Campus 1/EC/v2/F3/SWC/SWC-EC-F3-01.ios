@@ -211,6 +211,7 @@ ip dhcp excluded-address 172.30.50.62
 ip dhcp excluded-address 172.30.50.126
 ip dhcp excluded-address 172.30.51.14
 ip dhcp excluded-address 172.30.49.126
+ip dhcp excluded-address 172.30.49.129
 
 
 
@@ -352,6 +353,15 @@ router ospf 5
 router-id 1.1.1.1
 auto-cost reference-bandwidth 1000
 network 172.30.0.0 0.0.255.255 area 0
+exit
+
+!SYSLOG
+loggin trap debugging 
+service timestamps log datetime msec 
+logging 172.30.38.196
+!NTP
+ntp server 172.30.38.195
+
 end
 
 

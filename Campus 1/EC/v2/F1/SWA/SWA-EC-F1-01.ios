@@ -69,6 +69,14 @@ ip address 172.30.36.129 255.255.255.128
 no shutdown
 exit
 ip default-gateway 172.30.36.254
+
+!SYSLOG
+loggin trap debugging 
+service timestamps log datetime msec 
+logging 172.30.38.196
+!NTP
+ntp server 172.30.38.195
+
 end
 !Guardar configuracion
 copy running-config startup-config

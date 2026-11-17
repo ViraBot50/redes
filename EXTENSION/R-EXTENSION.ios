@@ -50,4 +50,13 @@ auto-cost reference-bandwidth 1000
 network 172.30.52.0 0.0.0.255 area 0
 network 172.30.53.0 0.0.0.255 area 0
 network 172.30.54.0 0.0.0.3 area 0
+exit
+
+!SYSLOG
+loggin trap debugging 
+service timestamps log datetime msec 
+logging 172.30.38.196
+!NTP
+ntp server 172.30.38.195
+
 end
